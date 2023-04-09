@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
 
 <head>
     <meta charset="UTF-8">
-    <title><!-- Название у нас будет News -->
-             {% block title %}
-              News
-             {% endblock title %}
+    <title>
+          {% block title %}
+               News
+          {% endblock title %}
     </title>
 </head>
 <body>
-<!-- В контенте на странице мы выводим саму новость, идентификатор которого был передан в url -->
 {% block content %}
-<h1>{{ news }}</h1>
+   <hr>
+   {% if article %}
+       <table cellspacing="5" cellpadding="10" border="1" width="100%"> <!-- Начинаем описывать таблицу -->
+
+           <tr>
+               <td>Заголовок</td>
+               <td>Дата публикации</td>
+               <td>Содержание</td>
+           </tr>
+           <td>{{ article.name }}</td>
+           <td>{{ article.date_pub|date:'d M Y'}}</td>
+           <td>{{ article.description}}</td>
+
+       </table>
+   {% else %}
+       <h2>Публикаций нет!</h2>
+   {% endif %}
 {% endblock content %}
 </body>
 </html>

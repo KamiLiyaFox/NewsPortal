@@ -1,20 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
+{% load censor %}
+
+
 <head>
     <meta charset="UTF-8">
-    <title><!-- Название у нас будет products -->
+    <title>
             {% block title %}
-             Products
+                  News
             {% endblock title %}
     </title>
 </head>
 <body>
-<!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-<h1>Все товары</h1>
-{{ products }}
+   <h1>Все новости </h1>
+   <h3>{{ news|length }}</h3>
+   <hr>
+   {% if news %}
+       <table cellspacing="5" cellpadding="10" border="1" width="100%"> <!-- Начинаем описывать таблицу -->
+
+           <tr>
+               <td>Заголовок</td>
+               <td>Дата публикации</td>
+               <td>Содержание</td>
+               <td>Категория</td>
+           </tr>
+
+          {% for n in news %}
+           <tr>
+               <td>{{ n.name|censor }}</td>
+               <td>{{ n.date_pub|date:'d.m.Y'}}</td>
+               <td>{{ n.description|truncatewords:20|censor }}</td>
+               <td>{{ n.category.name }}</td>
+           </tr>
+           {% endfor %}
+       </table>
+   {% else %}
+       <h2>Публикаций нет!</h2>
+   {% endif %}
 {% endblock content %}
 </body>
 </html>
