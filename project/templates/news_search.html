@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'flatpages/default.html' %}
+{% load censor %}
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        Поиск
+        {% endblock title %}
+    </title>
+</head>
+<body>
+{% block content %}
+   <h1> Поиск </h1>
+   <hr>
+   <form action="" method="get">
+       {{ filter.form.as_p }}
+       <input type="submit" value="Найти" />
+   </form>
+   <hr>
+   {% if filter %}
+       <table cellspacing="5" cellpadding="10" border="1" width="100%"> <!-- Начинаем описывать таблицу -->
+
+           <tr>
+               <td>Заголовок</td>
+               <td>Категория</td>
+               <td>Дата публикации</td>
+           </tr>
+
+            {%  for obj in filter.qs %}
+            <tr>
+                <td>{{ obj.name }}</td>
+                <td>{{ obj.category }}</td>
+                <td>{{ obj.date_pub|date:'d.m.Y' }}</td>
+            </tr>
+            {%  endfor %}
+       </table>
+   {% else %}
+       <h2>Публикаций нет!</h2>
+   {% endif %}
+
+   <!-- Добавляем пагинацию на страницу -->
+
+   <!-- Информация о предыдущих страницах -->
+   {% if page_obj.has_previous %}
+       <a href="?{% url_replace page=1 %}">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   <!--Информация о текущей странице -->
+   {{ page_obj.number }}
+
+   <!-- Информация о следующих страницах -->
+   {% if page_obj.has_next %}
+       <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endblock content %}
+</body>
+</html>
