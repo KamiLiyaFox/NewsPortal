@@ -19,6 +19,8 @@
        <input type="submit" value="Найти" />
    </form>
    <hr>
+
+
    {% if filter %}
        <table cellspacing="5" cellpadding="10" border="1" width="100%"> <!-- Начинаем описывать таблицу -->
 
@@ -33,7 +35,6 @@
                 <td>{{ obj.name }}</td>
                 <td>{{ obj.category }}</td>
                 <td>{{ obj.date_pub|date:'d.m.Y' }}</td>
-            </tr>
             {%  endfor %}
        </table>
    {% else %}

@@ -9,6 +9,8 @@ from.filters import *
 from django.urls import reverse_lazy
 from .forms import *
 from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 class NewsList(ListView):
@@ -79,7 +81,9 @@ class NewsDetail(DetailView):
 
 
 # Добавляем новое представление для создания новостей.
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('NW.add_news',)
+    #raise_exception = True
     # Указываем нашу разработанную форму
     form_class = NewsForm
     # модель новостей
@@ -87,7 +91,7 @@ class NewsCreate(CreateView):
     # и новый шаблон, в котором используется форма.
     template_name = 'news_create.html'
 
-    def create_product(request):
+    def create_news(request):
         form = NewsForm()
 
         if request.method == 'POST':
@@ -102,9 +106,9 @@ class NewsCreate(CreateView):
                       category=i['category'],
                  )
                 f.save()
-                return HttpResponseRedirect('/products/')
+                return HttpResponseRedirect('/news/')
 
-        return render(request, 'product_edit.html', {'form': form})
+        return render(request, 'news_edit.html', {'form': form})
 
 class NewsSearch(ListView):
     model = News
@@ -122,14 +126,20 @@ class NewsSearch(ListView):
             **super().get_context_data(*args, **kwargs),
             "filter": self.get_filter(),
         }
+
+    def get_absolute_url(self):
+        return reverse('news_detail', args=[str(self.id)])
+
 # Добавляем представление для изменения товара.
-class NewsUpdate(UpdateView):
+class NewsUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('NW.change_news',)
     form_class = NewsForm
     model = News
     template_name = 'news_edit.html'
 
 # Представление удаляющее товар.
-class NewsDelete(DeleteView):
+class NewsDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('NW.delete_news',)
     model = News
     template_name = 'news_delete.html'
     success_url = reverse_lazy('news_list')

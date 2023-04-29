@@ -18,7 +18,10 @@ from django.urls import path, include
 
 urlpatterns = [
    path('admin/', admin.site.urls),
-   path('pages/', include('django.contrib.flatpages.urls')),  # < вот тут
+   #path('accounts/', include('django.contrib.auth.urls')),
+   path('accounts/', include('allauth.urls')),  # Добавили эту строчку
+   # Оставили только allauth
+   #path('pages/', include('django.contrib.flatpages.urls')),  # < вот тут
    # Делаем так, чтобы все адреса из нашего приложения (NW/urls.py)
    # подключались к главному приложению с префиксом news/.
    path('news/', include('NW.urls')),

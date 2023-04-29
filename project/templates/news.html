@@ -14,6 +14,7 @@
 {% block content %}
    <h1>Все новости </h1>
 
+
 <!--    &lt;!&ndash; Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе&ndash;&gt;-->
 <!--   <form action="" method="get">-->
 <!--      &lt;!&ndash; Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями &ndash;&gt;-->
@@ -39,6 +40,13 @@
 
    <h3>{{ news|length }}</h3>
    <hr>
+
+   <!-- Теперь будем проверять не request.user.is_authenticated, а конкретные права -->
+   {% if perms.NW.add_news %}
+   <a href="{% url 'news_create' %}"><h3>Добавить новость</h3></a>
+   {% endif %}
+
+
    {% if news %}
        <table cellspacing="5" cellpadding="10" border="1" width="100%"> <!-- Начинаем описывать таблицу -->
 
@@ -47,6 +55,11 @@
                <td>Дата публикации</td>
                <td>Содержание</td>
                <td>Категория</td>
+
+               <!-- Условие получается составным. -->
+               {% if perms.NW.update_news or perms.NW.delete_news %}
+               <td>Действия</td>
+               {% endif %}
            </tr>
 
           {% for n in news %}
@@ -55,6 +68,16 @@
                <td>{{ n.date_pub|date:'d.m.Y'}}</td>
                <td>{{ n.description|truncatewords:20|censor }}</td>
                <td>{{ n.category.name }}</td>
+
+               <td>
+                    <!-- А здесь доступ для каждой ссылки теперь будем проверять отдельно -->
+                    {% if perms.NW.change_news %}
+                    <a href="{% url 'news_update' pk=n.id %}">Изменить</a>
+                    {% endif %}
+                    {% if perms.NW.delete_news %}
+                    <a href="{% url 'news_delete' n.id %}">Удалить</a>
+                    {% endif %}
+               </td>
            </tr>
            {% endfor %}
        </table>
