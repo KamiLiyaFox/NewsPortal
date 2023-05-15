@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.contrib import admin
 
 class Author(models.Model):
     authorUser = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -24,6 +25,7 @@ class Author(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     # названия категорий тоже не должны повторяться
+    subscribers = models.ManyToManyField(User, related_name='categories')
 
     def __str__(self):
         return self.name.title()
@@ -115,6 +117,13 @@ class News(models.Model):
         verbose_name = 'News'
         verbose_name_plural = 'News'
 
+class CategoryInline(admin.TabularInline):
+    # указываем в качестве модели промежуточный класс
+    model = PostCategory
+    extra = 1
+
+class PostAdmin(admin.ModelAdmin):
+    inlines = (CategoryInline,)
 
 # # Категория, к которой будет привязываться новость
 # class Category(models.Model):

@@ -21,10 +21,11 @@
                <td>Дата публикации</td>
                <td>Содержание</td>
            </tr>
-           <td>{{ article.name }}</td>
-           <td>{{ article.date_pub|date:'d m Y'}}</td>
-           <td>{{ article.description}}</td>
-
+           <tr>
+               <td>{{ article.name }}</td>
+               <td>{{ article.date_pub|date:'d m Y'}}</td>
+               <td>{{ article.description}}</td>
+           </tr>
        </table>
    {% else %}
        <h2>Публикаций нет!</h2>
