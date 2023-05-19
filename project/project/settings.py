@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'NW',
+    'NW.apps.NwConfig',
     'fpages',
     'django.contrib.sites',
     'django.contrib.flatpages',
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
+    'django_apscheduler',
 ]
 
 SITE_ID = 1
@@ -157,6 +158,7 @@ ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
 
+SITE_URL = 'http://127.0.0.1:8000'
 
 # Настройки почты
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -172,3 +174,7 @@ DEFAULT_FROM_EMAIL = "exampleTestkillfactory@yandex.ru"
 SERVER_EMAIL = "exampleTestkillfactory@yandex.ru"
 
 EMAIL_SUBJECT_PREFIX = 'SkillFactory'
+
+APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25

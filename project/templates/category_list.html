@@ -15,9 +15,7 @@
 <h1 class="text-center"> {{category}} <span class="text-muted fs-6 fw-normal"><h3>{{ category_news_list|length }}</h3></span></h1>
    {% if is_not_subscriber %}
        <p class = "text-center"><a href = "{% url 'subscribe' category.id %}" class = "btn btn-secondary btn-sm">Подписаться</a></p>
-   {% endif %}
-
-   {% if is_subscriber %}
+   {% else %}
        <p class = "text-center"><a href = "{% url 'unsubscribe' category.id %}" class = "btn btn-secondary btn-sm">Отписаться</a></p>
    {% endif %}
 
@@ -43,11 +41,7 @@
                <td>{{ n.name|censor }}</td>
                <td>{{ n.date_pub|date:'d.m.Y'}}</td>
                <td>{{ n.description|truncatewords:20|censor }}</td>
-               <td>
-                    {% for category in category.news.all %}
-                    <a href="{% url 'category_list' n.category.id %}">{{ n.category.name }}</a>
-                    {% endfor %}
-               </td>
+               <td><a href="{% url 'category_list' n.category.id %}">{{ n.category.name }}</a></td>
 
                <td>
                     <!-- А здесь доступ для каждой ссылки теперь будем проверять отдельно -->

@@ -9,6 +9,9 @@ class Author(models.Model):
     authorUser = models.OneToOneField(User, on_delete=models.CASCADE)
     ratingAuthor = models.SmallIntegerField(default=0)
 
+    def __str__(self):
+        return str(self.authorUser)
+
     def update_rating(self):
         postRat = self.post_set.aggregate(postRating=Sum('rating'))
         pRat = 0
@@ -92,6 +95,7 @@ class Comment(models.Model):
 
 # Новости для нашей страницы
 class News(models.Model):
+    author = models.ForeignKey(Author, null=True, on_delete=models.CASCADE)
     name = models.CharField(
         max_length=50,
         unique=True, # заголовки новостей не должны повторяться
@@ -104,6 +108,9 @@ class News(models.Model):
         on_delete=models.CASCADE,
         related_name='news', # все новости в категории будут доступны через поле news
     )
+    title = models.CharField(max_length=128, blank=True)
+    text = models.TextField(blank=True)
+    rating = models.SmallIntegerField(default=0)
 
 
     def __str__(self):
@@ -112,6 +119,8 @@ class News(models.Model):
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.id)])
 
+    def preview(self):
+        return self.text[:124] + '...'
 
     class Meta:
         verbose_name = 'News'

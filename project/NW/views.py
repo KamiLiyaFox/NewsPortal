@@ -154,9 +154,7 @@ class CategoryListView(ListView):
     template_name = 'category_list.html'
     context_object_name = 'category_news_list'
     paginate_by = 5
-    slug = SlugField(
-        validators=[UniqueValidator(queryset=Category.objects.all())]
-    )
+
 
     def get_queryset(self):
         self.category = get_object_or_404(Category, id=self.kwargs['pk'])
@@ -166,6 +164,8 @@ class CategoryListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
+        #print(f"{context['is_not_subscriber'] = }")
+
         context['category'] = self.category
         return context
 
@@ -185,7 +185,7 @@ def subscribe(request, pk):
 def unsubscribe(request, pk):
     user = request.user
     category = Category.objects.get(id=pk)
-    category.objects.filters(user=request.user).delete()
+    category.subscribers.remove(user)
 
     message = 'Вы успешно отписались от рассылки новостей категории '
     return render(request, 'unsubscribe.html', {'category': category, 'message': message})

@@ -67,11 +67,7 @@
                <td>{{ n.name|censor }}</td>
                <td>{{ n.date_pub|date:'d.m.Y'}}</td>
                <td>{{ n.description|truncatewords:20|censor }}</td>
-               <td>
-                    {% for cat in n.postCategory.all %}
-                    <a href="{% url 'category_list' cat.id %}">{{ cat.name }}</a>
-                    {% endfor %}
-               </td>
+               <td><a href="{% url 'category_list' n.category.id %}">{{ n.category }}</a></td>
 
                <td>
                     <!-- А здесь доступ для каждой ссылки теперь будем проверять отдельно -->
