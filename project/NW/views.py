@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.db.models import Exists, OuterRef, SlugField
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_protect
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
@@ -11,10 +11,14 @@ from django.core.paginator import Paginator
 from.filters import *
 from django.urls import reverse_lazy
 from .forms import *
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from rest_framework.validators import UniqueValidator
+from django.views import View
+from .tasks import *
+from datetime import datetime, timedelta
+from django.views.decorators.csrf import csrf_protect
 
 
 class NewsList(ListView):
@@ -189,3 +193,9 @@ def unsubscribe(request, pk):
 
     message = 'Вы успешно отписались от рассылки новостей категории '
     return render(request, 'unsubscribe.html', {'category': category, 'message': message})
+
+# class IndexView(View):
+#     def get(self, request):
+#         printer.delay(10)
+#         hello.delay()
+#         return HttpResponse('Hello!')

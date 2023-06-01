@@ -178,3 +178,12 @@ EMAIL_SUBJECT_PREFIX = 'SkillFactory'
 APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'
 
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
+
+CELERY_BROKER_URL = f'redis://default:tLMWkoSUFMzYmrOjYNnJBUiJk0cqFB66'\
+                    f'@redis-12219.c268.eu-west-1-2.ec2.cloud.redislabs.com:12219'
+CELERY_RESULT_BACKEND = f'redis://default:tLMWkoSUFMzYmrOjYNnJBUiJk0cqFB66'\
+                        f'@redis-12219.c268.eu-west-1-2.ec2.cloud.redislabs.com:12219'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
